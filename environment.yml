@@ -1,0 +1,13 @@
+name: cremspace
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - rdkit
+  - numpy
+  - scipy
+  - pytest
+  - pip
+  - pip:
+      - crem>=0.3.2
+      - -e .

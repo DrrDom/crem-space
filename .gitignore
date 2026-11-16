@@ -1,0 +1,9 @@
+__pycache__/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+*.partial
+# example outputs
+examples/tiny/tiny_r5.db
+examples/tiny/runs/

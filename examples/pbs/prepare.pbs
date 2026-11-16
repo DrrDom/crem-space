@@ -1,0 +1,16 @@
+#!/bin/bash -l
+#PBS -N cremspace_prepare
+#PBS -l select=1:ncpus=8:mem=64gb
+#PBS -l walltime=24:00:00
+#
+# Build a slice of a CReM v2 database on node-local disk and move it to OUT.
+# qsub -v DB=/path/crem_v2.db,RADIUS=5,OUT=/path/slice_r5.db examples/pbs/prepare.pbs
+#   optional: SETS=a,b  EXTRA="--no-cycle --min-freq 2"  ENV=cremspace
+set -e
+: ${DB:?set DB} ${RADIUS:?set RADIUS} ${OUT:?set OUT}
+conda activate ${ENV:-cremspace}
+export TMPDIR=${TMPDIR:-/tmp}/cremspace_prepare_$PBS_JOBID
+mkdir -p "$TMPDIR"
+trap 'rm -rf "$TMPDIR"' EXIT
+cremspace prepare -d "$DB" -r "$RADIUS" -o "$OUT" ${SETS:+--sets $SETS} --tmp-dir "$TMPDIR" \
+    -c ${NCPUS:-8} --cache-mb 32768 $EXTRA

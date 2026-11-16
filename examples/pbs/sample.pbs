@@ -1,0 +1,15 @@
+#!/bin/bash -l
+#PBS -N cremspace_sample
+#PBS -l select=1:ncpus=32:mem=120gb
+#PBS -l walltime=74:00:00
+#
+# Walkers for one or more sets; resubmit the same job to continue until `cremspace diagnose RUN` says DONE.
+# Request one CPU per walker (WALKERS x number of sets) and ~2 GB per walker plus the slice size.
+# qsub -v SLICE=/path/slice_r5.db,RUN=/path/runs/r5_grow,MODE=grow,SETS=a,b examples/pbs/sample.pbs
+#   optional: WALKERS=16  HOURS=72 (keep below the walltime)  ENV=cremspace
+set -e
+: ${SLICE:?set SLICE} ${RUN:?set RUN}
+conda activate ${ENV:-cremspace}
+cremspace sample "$SLICE" -o "$RUN" --mode ${MODE:-grow} ${SETS:+--sets $SETS} \
+    --walkers ${WALKERS:-16} --hours ${HOURS:-72}
+cremspace diagnose "$RUN" -c 4 || true
