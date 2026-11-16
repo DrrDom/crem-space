@@ -1,4 +1,4 @@
-# cremspace
+# CReM-space
 
 How many molecules can a CReM fragment database generate? `cremspace` estimates the size of the chemical space
 reachable with [CReM](https://github.com/DrrDom/crem) from the fragments of one database, without enumerating it.
@@ -64,9 +64,8 @@ file system. `prepare` reads the database once, sequentially and read-only, and 
 | `--tmp-dir` | build on node-local disk, then move the finished file to `-o` |
 
 A slice is itself a valid CReM v2 database (`grow_mol` and `make_cycle` run on it and give the same products as on
-the full database within these limits). For the 374 GB SureChEMBL + ChEMBL database with 8 sets the slices were
-3 GB (radius 1), 4 GB (radius 3), 10 GB (radius 5, grow) and 20 GB (radius 5, grow + make_cycle); building one took a
-few hours.
+the full database within these limits). A slice also contains some additional tables with pre-computed values to 
+speed-up further calculations.
 
 ### 2. `sample`: run the walkers
 
